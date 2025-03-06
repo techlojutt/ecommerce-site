@@ -1,0 +1,4 @@
+.transparent-overlay {
+    background: rgba(0, 0, 0, 0.2); /* Lighter transparent background */
+    backdrop-filter: blur(1px); /* Soft blur effect */
+  }
