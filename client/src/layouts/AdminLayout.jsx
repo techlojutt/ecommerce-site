@@ -11,7 +11,7 @@ function AdminLayout() {
         <AdminSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className='flex flex-1 flex-col'>
            <AdminHeader isOpen={isOpen} setIsOpen={setIsOpen} />
-            <main className='   p-4 md:p-6'>
+            <main className='bg-slate-50  p-4 md:p-6'>
                <Outlet/>
             </main>
         </div>

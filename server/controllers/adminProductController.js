@@ -134,8 +134,11 @@ const editProduct = async(req,res)=>{
 
 
 const deleteProduct = async(req,res)=>{
+
+    
    
     const {id} = req?.params
+    console.log(id,"id in delete product")
    
     try {
 
@@ -147,7 +150,7 @@ const deleteProduct = async(req,res)=>{
             })
         }
      
-       res.stsjson({
+       res.status(200).json({
            data:deletedProduct,
            success:true,
            message:"Product deleted successfully",

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {  MdClose } from "react-icons/md";
 import {toast} from 'react-hot-toast';
 import ProductUploadImage from '../../components/UploadImage';
-import { useDispatch } from 'react-redux';
-import { addNewProduct, fetchProducts } from '../../store/slices/productSlice'; 
+import { useDispatch, useSelector } from 'react-redux';
+import { addNewProduct, fetchProducts, resetupdateProductId, updateProducts } from '../../store/slices/productSlice'; 
+import ProductCard from './ProductCard';
 
 
 
@@ -16,10 +17,51 @@ const [description,setDescription] = useState('');
 const [category,setCategory] = useState('');
 const [brand,setBrand] = useState('');
 const [price,setPrice] = useState('');
-const [salePrice,setSalesPrice] = useState('');
+const [salesPrice,setSalesPrice] = useState('');
 const [totalStock,setTotalStock] = useState('');
 const [loading,setLoading] = useState(false);
 const [errorMessage,setErrorMessage] = useState('')
+
+
+
+
+useEffect(()=>{
+   dispatch(fetchProducts())
+},[])
+
+const product = useSelector(state=>state.adminProducts)
+console.log(product.products,"product data in product admin")
+const productData = product.products
+const updateProductById = product.updateProduct
+console.log(updateProductById,"updateProductById")
+
+const resetForm = ()=>{
+  setTitle('');
+  setDescription('');
+  setCategory('');
+  setBrand('');
+  setPrice('');
+  setSalesPrice('');
+  setTotalStock('');
+  setImageFile('');
+}
+
+
+useEffect(()=>{
+   if(updateProductById){
+      setTitle(updateProductById.title)
+      setDescription(updateProductById.description);
+      setCategory(updateProductById.category);
+      setBrand(updateProductById.brand);
+      setPrice(updateProductById.price);
+      setSalesPrice(updateProductById.salesPrice);
+      setTotalStock(updateProductById.totalStock);
+      setImageFile(updateProductById.image);
+   }
+   else{
+       resetForm()
+   }
+},[updateProductById])
 
 
 
@@ -69,8 +111,13 @@ const dispatch = useDispatch()
     setErrorMessage("")
 
     try{
-      const uploadImgUrl = await uploadImage()
-      const imageUrl = uploadImgUrl?.secure_url
+      let finalImageUrl = updateProductById.image
+      if(imageFile){
+        const uploadImgUrl = await uploadImage()
+        finalImageUrl = uploadImgUrl?.secure_url
+      }
+      
+       
 
       if(!imageUrl){
         toast.error("Image upload failed. Please try again.")
@@ -84,24 +131,25 @@ const dispatch = useDispatch()
        category,
        brand,
        price,
-       salePrice,
+       salesPrice,
        totalStock,
-       image:imageUrl
-           }
+       image:finalImageUrl
+      }
+
+      if(updateProductById){
+         product.id = updateProductById._id
+         dispatch(updateProducts(product).then((product)=>{
+           
+         }))
+      }
+      else{
      console.log(product,"product")
-     dispatch(addNewProduct(product)).then((data)=>{
-         console.log(data,"data in payload")
-         if(data?.payload?.success){
+     dispatch(addNewProduct(product)).then((product)=>{
+         console.log(product,"data in payload")
+         if(product?.payload?.success){
           dispatch(fetchProducts())
           setOpen(false)
-          setTitle('');
-          setDescription('');
-          setCategory('');
-          setBrand('');
-          setPrice('');
-          setSalesPrice('');
-          setTotalStock('');
-          setImageFile('');
+          
 
           toast("🎉 Product added successfully!", {
             icon: "✅",
@@ -119,9 +167,11 @@ const dispatch = useDispatch()
           });
           
          }
-     })
+     }) }
+     dispatch(resetupdateProductId())
+     resetForm()
+     
 
-    
 
     }catch(error){
       console.error("Error submitting product:", error);
@@ -139,13 +189,16 @@ const dispatch = useDispatch()
     
     <>
 
+
+
 {/* Overlay */}
 {open && (
   <div
     className="fixed inset-0 z-40 transition-opacity duration-300 transparent-overlay"
-    onClick={togglePanel}
-  ></div>
+    onClick={togglePanel}>
+  </div>
 )}
+ 
 
 /* Sidebar Panel */
 <div
@@ -161,6 +214,8 @@ const dispatch = useDispatch()
       <MdClose size={25} />
     </button>
   </div>
+
+ 
 
   {/* Form Fields */}
   <form onSubmit={onSubmitAddProduct} className="mt-4 flex flex-col gap-2">
@@ -194,7 +249,7 @@ const dispatch = useDispatch()
     <input value={price}  onChange={(e)=>setPrice(e.target.value)} type="number"
      placeholder="Price" className="shadow border p-2 rounded-md w-full"
      required />
-    <input value={salePrice} onChange={(e)=>setSalesPrice(e.target.value)} 
+    <input value={salesPrice} onChange={(e)=>setSalesPrice(e.target.value)} 
     type="number" placeholder="Sale Price" className="shadow border p-2 
     rounded-md w-full" required />
     <input value={totalStock} onChange={(e)=>setTotalStock(e.target.value)} 
@@ -217,7 +272,15 @@ const dispatch = useDispatch()
     text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700
   dark:focus:ring-gray-700 dark:border-gray-700">Add New Product</button>
 
-    </div>
+  </div>
+  <div className='grid grid-cols-1 gap-8 mx-auto mt-12 sm:grid-cols-2 md:grid-cols-3 '>
+    {
+      productData?.map((productItem)=>{
+       return <ProductCard key={productItem.id} product={productItem} setOpen={setOpen} />
+      })
+    }
+  </div>
+    
     </>
   )
 }
