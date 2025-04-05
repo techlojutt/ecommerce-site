@@ -13,14 +13,16 @@ export const updateProducts = createAsyncThunk(
   "products/updateProduct",
   async(updatedFormData,{rejectWithValue})=>{
         try {
-
+          console.log(updatedFormData,"updated form data in async thunk")
+          
           const productId = updatedFormData.id;
+          const updatedProduct = updatedFormData
           delete updatedFormData.id
           const response = await api.put(`/api/admin/products/edit/${productId}`,
             updatedFormData
           )
 
-          return productId
+          return updatedProduct
           
         } catch (error) {
           console.log(error)
@@ -184,6 +186,36 @@ export const productSlice = createSlice({
             }
             
      })
+
+     builder.addCase(updateProducts.pending,(state,action)=>{
+      state.isLoading  = true
+      state.error = null
+ })
+     builder.addCase(updateProducts.fulfilled,(state,action)=>{
+          console.log(action.payload,"action payload in fulfilled update")
+          const updatedProduct = action.payload
+          state.isLoading = false
+          
+          state.products = state.products.map((product)=>{
+               if(product._id === action.payload.id ){
+                  return {
+                    ...product,
+                    ...updatedProduct
+                  }
+               }
+               return product
+          })
+     })
+     builder.addCase(updateProducts.rejected,(state,action)=>{
+      state.isLoading = false 
+      if (action.payload) {
+       state.error = action.payload.message
+     }
+     else{
+       state.error = action.error?.message || "Something went wrong!";
+     }
+     
+})
     }
 })
 

@@ -46,6 +46,11 @@ const resetForm = ()=>{
   setImageFile('');
 }
 
+useEffect(()=>{
+  if(!open){
+    dispatch(resetupdateProductId())
+  }
+},[open])
 
 useEffect(()=>{
    if(updateProductById){
@@ -119,7 +124,7 @@ const dispatch = useDispatch()
       
        
 
-      if(!imageUrl){
+      if(!finalImageUrl){
         toast.error("Image upload failed. Please try again.")
         throw new Error("Image upload failed. Please try again.")
       }
@@ -138,9 +143,7 @@ const dispatch = useDispatch()
 
       if(updateProductById){
          product.id = updateProductById._id
-         dispatch(updateProducts(product).then((product)=>{
-           
-         }))
+         dispatch(updateProducts(product))
       }
       else{
      console.log(product,"product")
@@ -259,7 +262,8 @@ const dispatch = useDispatch()
     {/* Save Button */}
     <button type='submit' className="bg-gray-900 text-white p-2 rounded-md 
     mt-2 hover:bg-gray-800 shadow cursor-pointer" >
-     {loading?"Adding..." :"Add" }
+     {loading?`${updateProductById?'Updating':'Adding'}`:
+     `${updateProductById?'Update':'Add'}` }
     </button>
   </form>
 </div>
