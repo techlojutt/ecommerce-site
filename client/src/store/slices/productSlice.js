@@ -14,15 +14,16 @@ export const updateProducts = createAsyncThunk(
   async(updatedFormData,{rejectWithValue})=>{
         try {
           console.log(updatedFormData,"updated form data in async thunk")
-          
+          console.log(updatedFormData.id,"form data id")
           const productId = updatedFormData.id;
-          const updatedProduct = updatedFormData
-          delete updatedFormData.id
+          const dataToSend = {...updatedFormData}
+          delete dataToSend.id
+          
           const response = await api.put(`/api/admin/products/edit/${productId}`,
-            updatedFormData
+            dataToSend
           )
-
-          return updatedProduct
+          console.log("updated Product",updatedFormData)
+          return updatedFormData
           
         } catch (error) {
           console.log(error)
@@ -193,6 +194,7 @@ export const productSlice = createSlice({
  })
      builder.addCase(updateProducts.fulfilled,(state,action)=>{
           console.log(action.payload,"action payload in fulfilled update")
+          console.log(action.payload.id,"action fullfilled id")
           const updatedProduct = action.payload
           state.isLoading = false
           

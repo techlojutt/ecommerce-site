@@ -19,7 +19,9 @@ function ProductUploadImage({
          console.log(event.target.files)
          const choosedFile = event.target.files?.[0];
          if(choosedFile){
+            console.log(choosedFile,"choosed file")
             setImageFile(choosedFile)
+            console.log(imageFile,"image file")
          }
    }
 

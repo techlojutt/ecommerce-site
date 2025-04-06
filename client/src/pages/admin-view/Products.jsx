@@ -21,7 +21,8 @@ const [salesPrice,setSalesPrice] = useState('');
 const [totalStock,setTotalStock] = useState('');
 const [loading,setLoading] = useState(false);
 const [errorMessage,setErrorMessage] = useState('')
-
+const [imageFile,setImageFile] = useState('')
+const [uploadImageUrl,setUploadImageUrl] = useState('')
 
 
 
@@ -70,8 +71,9 @@ useEffect(()=>{
 
 
 
-const [imageFile,setImageFile] = useState('')
-const [uploadImageUrl,setUploadImageUrl] = useState('')
+
+
+console.log(imageFile,"image file")
 
 const dispatch = useDispatch()
 
@@ -116,8 +118,9 @@ const dispatch = useDispatch()
     setErrorMessage("")
 
     try{
-      let finalImageUrl = updateProductById.image
+      let finalImageUrl = updateProductById?.image
       if(imageFile){
+        console.log(imageFile,'image file in try')
         const uploadImgUrl = await uploadImage()
         finalImageUrl = uploadImgUrl?.secure_url
       }
@@ -262,7 +265,7 @@ const dispatch = useDispatch()
     {/* Save Button */}
     <button type='submit' className="bg-gray-900 text-white p-2 rounded-md 
     mt-2 hover:bg-gray-800 shadow cursor-pointer" >
-     {loading?`${updateProductById?'Updating':'Adding'}`:
+     {loading?`${updateProductById?'Updating...':'Adding...'}`:
      `${updateProductById?'Update':'Add'}` }
     </button>
   </form>
