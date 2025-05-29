@@ -4,9 +4,9 @@ import ShoppingViewHeader from '../components/ShoppingViewHeader'
 
 function ShoppingLayout() {
   return (
-    <div className='flex flex-col bg-red-300 overflow-hidden'>
+    <div className='flex flex-col overflow-hidden'>
         <ShoppingViewHeader/>
-        <main className='flex flex-col w-full bg-green-300'>
+        <main className='flex flex-col w-full'>
             <Outlet/>
         </main>
     </div>

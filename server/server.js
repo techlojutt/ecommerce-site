@@ -4,8 +4,8 @@ const cors = require('cors')
 const authRouter = require('./routes/authRoutes')
 
 const connectDb = require('./config/db');
-const productRouter = require('./routes/adminProductRoutes');
-
+const adminProductRouter = require('./routes/adminProductRoutes');
+const shopProductRouter = require('./routes/shopProductRoutes')
 
 const app = express()
 const port = process.env.PORT || 3000;
@@ -27,7 +27,9 @@ app.use(express.json())
 
 app.use('/api/auth',authRouter)
 
-app.use('/api/admin/products',productRouter)
+app.use('/api/admin/products',adminProductRouter)
+
+app.use('/api/shop/products',shopProductRouter)
 
 
 app.get('/',(req,res)=>{

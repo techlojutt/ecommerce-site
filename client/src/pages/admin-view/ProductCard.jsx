@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { deleteProduct, updateProduct } from '../../store/slices/productSlice'
+import { deleteProduct, updateProduct } from '../../store/slices/adminProductSlice'
 
 
 function ProductCard({product,setOpen}) {

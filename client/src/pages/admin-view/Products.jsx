@@ -3,8 +3,9 @@ import {  MdClose } from "react-icons/md";
 import {toast} from 'react-hot-toast';
 import ProductUploadImage from '../../components/UploadImage';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewProduct, fetchProducts, resetupdateProductId, updateProducts } from '../../store/slices/productSlice'; 
+import { addNewProduct, fetchProducts, resetupdateProductId, updateProducts } from '../../store/slices/adminProductSlice'; 
 import ProductCard from './ProductCard';
+import { brandDropdownItems, categoryDropdownItems } from '../../constants/constants';
 
 
 
@@ -235,21 +236,21 @@ const dispatch = useDispatch()
     {/* Category Dropdown */}
     <select value={category} onChange={(e)=>setCategory(e.target.value)} className="border p-2 rounded-md w-full shadow" required>
       <option value="">Select Category</option>
-      <option value="electronics">Electronics</option>
-      <option value="fashion">Fashion</option>
-      <option value="home_appliances">Home Appliances</option>
-      <option value="books">Books</option>
-      <option value="beauty">Beauty & Health</option>
+      {
+        categoryDropdownItems.map(item=>{
+          return <option key={item.id} value={item.id}>{item.label}</option>
+        })
+      }
     </select>
 
     {/* Brand Dropdown */}
     <select value={brand} onChange={(e)=>setBrand(e.target.value)} className="shadow border p-2 rounded-md w-full " required>
       <option value="">Select Brand</option>
-      <option value="apple">Apple</option>
-      <option value="samsung">Samsung</option>
-      <option value="nike">Nike</option>
-      <option value="adidas">Adidas</option>
-      <option value="sony">Sony</option>
+      {
+        brandDropdownItems.map(item=>{
+          return <option key={item.id} value={item.id}>{item.label}</option>
+        })
+      }
     </select>
 
     <input value={price}  onChange={(e)=>setPrice(e.target.value)} type="number"

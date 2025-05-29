@@ -101,7 +101,7 @@ export const fetchProducts = createAsyncThunk(
 
 
 
-export const productSlice = createSlice({
+export const adminProductSlice = createSlice({
     name:"adminProductSlice",
     initialState:{
         products:[],
@@ -222,5 +222,5 @@ export const productSlice = createSlice({
 })
 
 
-export const {updateProduct,resetupdateProductId} = productSlice.actions
-export default productSlice.reducer
+export const {updateProduct,resetupdateProductId} = adminProductSlice.actions
+export default adminProductSlice.reducer

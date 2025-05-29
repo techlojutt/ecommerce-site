@@ -4,7 +4,7 @@ import AuthLayout from './layouts/AuthLayout';
 import Login from './pages/auth/login';
 import Register from './pages/auth/Register';
 import './App.css'
-import AdminLayout from './layouts/AdminLAyout';
+import AdminLayout from './layouts/AdminLayout';
 import AdminDashboard from './pages/admin-view/Dashboard';
 import AdminFeatures from './pages/admin-view/Features';
 import AdminOrders from './pages/admin-view/Orders';
